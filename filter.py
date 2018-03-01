@@ -11,15 +11,14 @@ def merOf(line):
   
 
 def nodeIndexOf(line):
-  print(line)
   interfaceString = line.split(":")[1].strip()
-  print(interfaceString)
   nodeIndex = int(interfaceString.split("/")[0])
   return nodeIndex
 
 
 # main
 
+# snr collect
 lines = [l for l in open("./signal")]
 lineCount = len(lines)
 
@@ -32,18 +31,24 @@ for i in range(len(filtered)/2):
   node["merString"] = filtered[i * 2 + 1]
   nodeStrings.append(node)
 
+
+
+snrDict = {}
+
 for node in nodeStrings:
-  print("--------node--------")
-  for k in node:
-    print("{} ##### {}".format(k, node[k]))
+  nodeIndex = nodeIndexOf(node["interfaceString"])
+  currentMer = merOf(node["merString"])
+  # just keep record the minimum snr
+  if nodeIndex not in snrDict:
+    snrDict[nodeIndex] = currentMer
+  else:
+    if currentMer < snrDict[nodeIndex]:
+      snrDict[nodeIndex] = currentMer
 
 
-#snrDict = {}
-#
-#for node in nodeStrings[1:2]:
-#  nodeIndex = nodeIndexOf(node["interfaceString"])
-#  snrDict[nodeIndex] = merOf(node["merString"])
+# SNR Threshold
+threshold = 35
+for node in snrDict:
+  if snrDict[node] < threshold:
+    print("{}: {}".format(node, snrDict[node]))
 
-
-#for node in snrDict:
-#  print("{}: {}".format(node, snrDict[node]))
