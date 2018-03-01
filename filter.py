@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+# snr collect
 def snrRelated(l):
   if "I/F" in l or "MER(dB)" in l:
     return True
@@ -16,9 +17,6 @@ def nodeIndexOf(line):
   return nodeIndex
 
 
-# main
-
-# snr collect
 lines = [l for l in open("./signal")]
 lineCount = len(lines)
 
