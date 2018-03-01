@@ -1,20 +1,20 @@
 #!/usr/bin/env python
 
-# serial number collect
-lines = [l for l in open("./serialNumber")]
-
-
-def serialNumberOf(line):
-  words = line.split()
-  nodeIndex = int(words[2].strip())
-  serialNumber = words[-1].strip()
-  return (nodeIndex, serialNumber)
-
-
-serialDict = {}
-for l in lines:
-  nodeIndex, serialNumber = serialNumberOf(l)
-  serialDict[nodeIndex] = serialNumber
-
-for key in serialDict:
-  print("{}: {}".format(key, serialDict[key]))
+ serial part # serial number collect
+ serial part lines = [l for l in open("./serialNumber")]
+ serial part 
+ serial part 
+ serial part def serialNumberOf(line):
+ serial part   words = line.split()
+ serial part   nodeIndex = int(words[2].strip())
+ serial part   serialNumber = words[-1].strip()
+ serial part   return (nodeIndex, serialNumber)
+ serial part 
+ serial part 
+ serial part serialDict = {}
+ serial part for l in lines:
+ serial part   nodeIndex, serialNumber = serialNumberOf(l)
+ serial part   serialDict[nodeIndex] = serialNumber
+ serial part 
+ serial part for key in serialDict:
+ serial part   print("{}: {}".format(key, serialDict[key]))
