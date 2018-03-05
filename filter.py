@@ -20,20 +20,19 @@ def logFilePaths():
 
 # serial number collect
 def serialNumberOf(line):
-  words = line.split()
+  words = line.strip().split()
   nodeIndex = int(words[2].strip())
   serialNumber = words[-1].strip()
   return (nodeIndex, serialNumber)
 
 
-
 def serialNumbersOf(logFilePath):
-  lines = [l for l in open("./serialNumber") if "frame add" in l]
+  lines = [l for l in open(logFilePath) if "frame add" in l]
   serialDict = {}
   for l in lines:
     nodeIndex, serialNumber = serialNumberOf(l)
     serialDict[nodeIndex] = serialNumber
-  return serailDict
+  return serialDict
 
 
 
@@ -54,10 +53,11 @@ def nodeIndexOf(line):
   return nodeIndex
 
 
-def snrOf(site):
+  
+  
+def snrOfLog(logFilePath, threshold):
 
-  lines = [l for l in open("./signal")]
-  lineCount = len(lines)
+  lines = [l for l in open(logFilePath)]
   
   filtered = [l.strip() for l in lines if snrRelated(l)]
   
@@ -67,9 +67,7 @@ def snrOf(site):
     node["interfaceString"] = filtered[i * 2]
     node["merString"] = filtered[i * 2 + 1]
     nodeStrings.append(node)
-  
-  
-def snrOfLog(logFilePath):
+
   snrDict = {}
   for node in nodeStrings:
     nodeIndex = nodeIndexOf(node["interfaceString"])
@@ -81,20 +79,37 @@ def snrOfLog(logFilePath):
       if currentMer < snrDict[nodeIndex]:
         snrDict[nodeIndex] = currentMer
 
-
-# SNR Threshold
-
-def logAll():
-  threshold = 50
+  snrLowDict = {}
   for node in snrDict:
     if snrDict[node] < threshold:
-      print("{}: {}".format(serialDict[node], snrDict[node]))
+      snrLowDict[node] = snrDict[node]
+  return snrLowDict
+  
 
 
-def main():
+def printDictionary(dict):
+  for key in dict:
+    print("{}: {}".format(key, dict[key])) 
+
+def snrLowerThan(threshold, logFilePath):
+  serialNumberDict = serialNumbersOf(logFilePath)
+  snrLowDict = snrOfLog(logFilePath, 30)
+  serialSnrDict = {}
+  for node in snrLowDict:
+    serialNumer = serialNumberDict[node]
+    serialSnrDict[serialNumer] = snrLowDict[node]
+  return serialSnrDict
+  
+
+def snrThresholdBy(threshold):
   paths = logFilePaths()
-  for p in paths:
-    print(p)
+  for filePath in paths:
+    siteName = filePath.split("/")[-1]
+    print("")
+    print("------------------{}------------------".format(siteName))
+    print(filePath)
+    d = snrLowerThan(30, filePath)
+    printDictionary(d)
 
 if __name__ == "__main__":
-    main()
+  snrThresholdBy(30)
