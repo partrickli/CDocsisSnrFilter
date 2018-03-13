@@ -4,8 +4,6 @@
 import os
 import os.path as path
 
-sites = ["gd, js"]
-
 
 def logFilePaths():
   currentWorkingDirectory = os.getcwd()
@@ -14,8 +12,6 @@ def logFilePaths():
   logFileNames = os.listdir(logRootPath)
   logFilePaths = [path.join(logRootPath, name) for name in logFileNames]
   return logFilePaths
-
-
 
 
 # serial number collect
